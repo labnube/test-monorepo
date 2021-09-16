@@ -30,3 +30,20 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: kubectl version
+      
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["ms1/v1.0.0_leal_full.yaml"]'
+        env:
+          NS: co-example
+          NAME: ms-single-echo
+          REPL: 1
+          CIMAGE: docker
+          CPORT: 8080
+          PATH: /test
+      - name: Run a one-line script
+        run: |
+          pwd
+          ls
+          
+
