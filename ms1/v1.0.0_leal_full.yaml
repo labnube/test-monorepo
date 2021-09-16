@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #{NAME}#-deploy
+  namespace: #{NS}#
+spec:
+  replicas: #{REPL}#
+  selector:
+    matchLabels:
+      app: #{NAME}#
+  template:
+    metadata:
+      labels:
+        app: #{NAME}#
+    spec:
+      containers:
+      - name: #{NAME}#
+        image: #{CIMAGE}#
+        ports:
+        - containerPort: #{CPORT}#
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #{NAME}#-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: #{CPORT}#
+    protocol: TCP
+    name: http
+  selector:
+    app: #{NAME}#
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: #{NAME}#-ing
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/group.name: lealdeveks
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/subnets: subnet-03aa00c5de9f1eda9,subnet-0836a40a0eb286ac0
+    alb.ingress.kubernetes.io/tags: Environment=dev,Team=test
+spec:
+  rules:
+    - http:
+        paths:
+        - path: #{PATH}#
+          backend:
+            serviceName: #{NAME}#-svc
+            servicePort: 80
