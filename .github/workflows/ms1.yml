@@ -29,7 +29,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: kubectl version
+        run: cat ms1/v1.0.0_leal_full.yaml
       
       - uses: cschleiden/replace-tokens@v1
         with:
